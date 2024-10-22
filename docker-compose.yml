@@ -2,11 +2,12 @@ services:
   spark-master:
     image: bitnami/spark:3.2.1
     environment:
-      JDK_JAVA_OPTIONS: --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
-      SPARK_MODE: master
+      - JDK_JAVA_OPTIONS=--add-opens=java.base/sun.nio.ch=ALL-UNNAMED
+      - SPARK_MODE=master
     ports:
-      - "8080:8080"
-      - "4040:4040"
+      - "8080:8080"  # Master UI
+      - "7077:7077"  # Master port
+      - "4040:4040"  # Application UI
     volumes:
       - "./spark-logs:/spark/logs"
 
@@ -15,8 +16,12 @@ services:
     depends_on:
       - spark-master
     environment:
-      JDK_JAVA_OPTIONS: --add-opens=java.base/sun.nio.ch=ALL-UNNAMED
-      SPARK_MODE: worker
-      SPARK_MASTER_URL: spark://spark-master:7077
+      - JDK_JAVA_OPTIONS=--add-opens=java.base/sun.nio.ch=ALL-UNNAMED
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+    ports:
+      - "8081:8081"  # Worker UI
     volumes:
       - "./spark-logs:/spark/logs"

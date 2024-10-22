@@ -163,9 +163,11 @@ based on https://www.youtube.com/watch?v=S2MUhGA3lEw
 ### running spark example
 
 ```agsl
-./bin/spark-submit \
+spark-submit \
   --class org.apache.spark.examples.SparkPi \
-  --master local[8] \
-  ./examples/jars/spark-examples_2.12-3.2.1.jar \
+  --master spark://spark-master:7077 \
+  /opt/bitnami/spark/examples/jars/spark-examples_2.12-3.2.1.jar \
   100
 ```
+
+
