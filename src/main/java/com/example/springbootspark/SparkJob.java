@@ -16,7 +16,7 @@ public class SparkJob {
         System.out.println("Running Spark Word Count Job");
         SparkSession spark = SparkSession.builder()
                 .appName("Word Count Spark")
-                .master("spark://790f2ec16bc3:7077")
+                .master("local[*]")
                 .getOrCreate();
 
         try (JavaSparkContext sc = new JavaSparkContext(spark.sparkContext())) {
