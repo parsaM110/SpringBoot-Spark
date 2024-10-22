@@ -23,6 +23,11 @@ run spark shell:
 ```
 I have no name!@f6482cc64722:/opt/bitnami/spark$ spark-shell
 ```
+actually if you want to see in SparkUI:
+```agsl
+spark-shell --master spark://spark-master:7077
+
+```
 now read a file and create RDD(Resilient Distributed Dataset) from it:
 ```bash
 scala> val x = sc.textFile("README.md")
@@ -88,6 +93,10 @@ pip install numpy
 now we can use pyspark ml kit:
 ```
 pyspark
+```
+if you want to see it in SparkUI:
+```agsl
+pyspark --master spark://spark-master:7077
 ```
 and now we can use it:
 seems like in root mode pyspark doesn't work well so go back to `I have no name!` user.
@@ -161,7 +170,7 @@ DenseVector([95.1646, -49.738, -28.5369, -1.0407])
 based on https://www.youtube.com/watch?v=S2MUhGA3lEw
 
 ### running spark example
-
+execute this in master container:
 ```agsl
 spark-submit \
   --class org.apache.spark.examples.SparkPi \
