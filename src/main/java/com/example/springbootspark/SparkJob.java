@@ -16,32 +16,18 @@ public class SparkJob {
         System.out.println("Running Spark Word Count Job");
         SparkSession spark = SparkSession.builder()
                 .appName("Word Count Spark")
-                .master("local[*]")
+                .master("spark://localhost:7077")  // Connect to Spark master through localhost
+                .config("spark.driver.host", "localhost")  // Important for connecting from outside Docker
+                .config("spark.driver.bindAddress", "localhost")
+                .config("spark.submit.deployMode", "client")
                 .getOrCreate();
 
         try (JavaSparkContext sc = new JavaSparkContext(spark.sparkContext())) {
-            sc.setJobGroup("WordCountJob", "Counting words from dataset");
-            List<String> data = Arrays.asList(
-                    "Hello Spark World",
-                    "Spark is great",
-                    "Hello Spark",
-                    "Java and Spark"
-            );
+            System.out.println("Hello World Context");
+            List<String> data = Arrays.asList("Hello", "World", "from", "Test", "Spark");
             JavaRDD<String> rdd = sc.parallelize(data);
-
-            // Split each line into words
-            JavaRDD<String> words = rdd.flatMap(line -> Arrays.asList(line.split(" ")).iterator());
-
-            // Map each word to a tuple (word, 1)
-            JavaPairRDD<String, Integer> wordPairs = words.mapToPair(word -> new Tuple2<>(word, 1));
-
-            // Reduce by key (word) to get word counts
-            JavaPairRDD<String, Integer> wordCounts = wordPairs.reduceByKey(Integer::sum);
-
-            // Collect and print the results
-            List<Tuple2<String, Integer>> result = wordCounts.collect();
-            System.out.println("\u001B[34mWord Count Results\u001B[0m");
-            result.forEach(tuple -> System.out.println(tuple._1() + ": " + tuple._2()));
+            System.out.println("\u001B[31m" + "Hello World RDD" + "\u001B[0m");
+            rdd.foreach(w -> System.out.println(w));
         } finally {
             spark.stop();
         }
