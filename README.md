@@ -178,5 +178,24 @@ spark-submit \
   /opt/bitnami/spark/examples/jars/spark-examples_2.12-3.2.1.jar \
   100
 ```
+working with SparkSQL:
+```agsl
+scala> val df = spark.read.json("examples/src/main/resources/people.json");
+df: org.apache.spark.sql.DataFrame = [age: bigint, name: string]                
+
+scala> df.show()
++----+-------+
+| age|   name|
++----+-------+
+|null|Michael|
+|  30|   Andy|
+|  19| Justin|
++----+-------+
+
+scala> df.printSchema()
+root
+ |-- age: long (nullable = true)
+ |-- name: string (nullable = true)
+```
 
 
