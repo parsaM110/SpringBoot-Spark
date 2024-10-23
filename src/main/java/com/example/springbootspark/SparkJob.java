@@ -16,10 +16,17 @@ public class SparkJob {
         System.out.println("Running Spark Word Count Job");
         SparkSession spark = SparkSession.builder()
                 .appName("Word Count Spark")
-                .master("spark://localhost:7077")  // Connect to Spark master through localhost
-                .config("spark.driver.host", "localhost")  // Important for connecting from outside Docker
+                .master("spark://localhost:7077")
+                .config("spark.driver.host", "localhost")
                 .config("spark.driver.bindAddress", "localhost")
+                // Add these configurations
+                .config("spark.driver.memory", "1g")
+                .config("spark.executor.memory", "1g")
+                .config("spark.executor.cores", "1")
+                .config("spark.cores.max", "2")
                 .config("spark.submit.deployMode", "client")
+                // Important for resource allocation
+                .config("spark.scheduler.mode", "FAIR")
                 .getOrCreate();
 
         try (JavaSparkContext sc = new JavaSparkContext(spark.sparkContext())) {
